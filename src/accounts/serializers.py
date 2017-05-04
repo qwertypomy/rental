@@ -4,18 +4,18 @@ from accounts.models import User
 from lib.utils import validate_email as email_is_valid
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name',)
+        fields = ('url', 'phone_number', 'email', 'first_name', 'last_name',)
 
 
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField()
+class UserRegistrationSerializer(serializers.HyperlinkedModelSerializer):
+    #email = serializers.EmailField()
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'first_name', 'last_name', 'password')
+        fields = ('url', 'phone_number', 'email', 'first_name', 'last_name', 'password')
 
     def create(self, validated_data):
         """
@@ -35,6 +35,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         :param value: string
         :return: string
         """
+        if not value:
+            return value
 
         if not email_is_valid(value):
             raise serializers.ValidationError('Please use a different email address provider.')

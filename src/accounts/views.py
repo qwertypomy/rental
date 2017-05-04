@@ -5,13 +5,15 @@ from knox.models import AuthToken
 from rest_framework import status
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import CreateModelMixin
+from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, ListModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 from accounts.models import User
 from accounts.serializers import UserRegistrationSerializer, UserSerializer
 from lib.utils import AtomicMixin
+from lib.permissions import IsStaffOrTargetUser
 
 
 class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
@@ -19,8 +21,19 @@ class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
     authentication_classes = ()
 
     def post(self, request):
-        """User registration view."""
         return self.create(request)
+
+
+class UserViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    permission_classes = (IsStaffOrTargetUser,)
+
+
+class CurrentUserView(APIView):
+    def get(self, request):
+        serializer = UserSerializer(request.user, context={'request': request})
+        return Response(serializer.data)
 
 
 class UserLoginView(GenericAPIView):
@@ -29,7 +42,6 @@ class UserLoginView(GenericAPIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        """User login with username and password."""
         token = AuthToken.objects.create(request.user)
         return Response({
             'user': self.get_serializer(request.user).data,

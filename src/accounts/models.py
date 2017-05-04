@@ -6,13 +6,17 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import PermissionsMixin
+
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class MyUserManager(BaseUserManager):
-    def _create_user(self, email, password, first_name, last_name, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, phone_number, email, password, first_name, last_name, is_staff, is_superuser, **extra_fields):
         """
         Create and save an User with the given email, password, name and phone number.
 
+        :param phone_number: string
         :param email: string
         :param password: string
         :param first_name: string
@@ -23,8 +27,11 @@ class MyUserManager(BaseUserManager):
         :return: User
         """
         now = timezone.now()
+
         email = self.normalize_email(email)
-        user = self.model(email=email,
+
+        user = self.model(phone_number=phone_number,
+                          email=email,
                           first_name=first_name,
                           last_name=last_name,
                           is_staff=is_staff,
@@ -37,10 +44,11 @@ class MyUserManager(BaseUserManager):
 
         return user
 
-    def create_user(self, email, first_name, last_name, password, **extra_fields):
+    def create_user(self, phone_number, first_name, last_name, password, email='', **extra_fields):
         """
         Create and save an User with the given email, password and name.
 
+        :param phone_number: string
         :param email: string
         :param first_name: string
         :param last_name: string
@@ -49,13 +57,14 @@ class MyUserManager(BaseUserManager):
         :return: User
         """
 
-        return self._create_user(email, password, first_name, last_name, is_staff=False, is_superuser=False,
+        return self._create_user(phone_number, email, password, first_name, last_name, is_staff=False, is_superuser=False,
                                  **extra_fields)
 
-    def create_superuser(self, email, first_name='', last_name='', password=None, **extra_fields):
+    def create_superuser(self, phone_number, email='', first_name='', last_name='', password=None, **extra_fields):
         """
         Create a super user.
 
+        :param phone_number: string
         :param email: string
         :param first_name: string
         :param last_name: string
@@ -63,11 +72,11 @@ class MyUserManager(BaseUserManager):
         :param extra_fields:
         :return: User
         """
-        return self._create_user(email, password, first_name, last_name, is_staff=True, is_superuser=True,
+        return self._create_user(phone_number, email, password, first_name, last_name, is_staff=True, is_superuser=True,
                                  **extra_fields)
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     """
     Model that represents an user.
 
@@ -81,18 +90,20 @@ class User(AbstractBaseUser):
         (GENDER_FEMALE, 'Female')
     )
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     first_name = models.CharField(_('First Name'), max_length=50)
     last_name = models.CharField(_('Last Name'), max_length=50)
-    email = models.EmailField(_('Email address'), unique=True)
+    email = models.EmailField(_('Email address'), blank=True)
+
+    phone_number = PhoneNumberField(unique=True)
 
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=GENDER_MALE)
 
     confirmed_email = models.BooleanField(default=False)
 
     is_staff = models.BooleanField(_('staff status'), default=False)
-    is_superuser = models.BooleanField(_('superuser status'), default=False)
+    #is_superuser = models.BooleanField(_('superuser status'), default=False) # Already exist in PermissionsMixin
     is_active = models.BooleanField(_('active'), default=True)
 
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
@@ -100,7 +111,7 @@ class User(AbstractBaseUser):
 
     activation_key = models.UUIDField(unique=True, default=uuid.uuid4)  # email
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'phone_number'
 
     objects = MyUserManager()
 
@@ -110,7 +121,9 @@ class User(AbstractBaseUser):
 
         :return: string
         """
-        return self.email
+        if self.first_name and self.last_name:
+            return "{0} {1}".format(self.first_name, self.last_name)
+        return str(self.phone_number)
 
     def get_full_name(self):
         """

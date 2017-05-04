@@ -1,10 +1,6 @@
-[![Build Status](https://travis-ci.org/Seedstars/django-react-redux-base.svg?branch=master)](https://travis-ci.org/Seedstars/django-react-redux-base)
+#Rental App
 
-# Django React/Redux Base Project
-
-This repository includes a boilerplate project used for all Seedstars Labs applications. It uses Django as backend and React as frontend.
-
-We build on the shoulders of giants with the following technologies:
+## Based on "Django React/Redux Base Project"
 
 **Frontend**
 
@@ -143,19 +139,6 @@ Backend (django/python static analysis)
 * `$ docker exec -i -t djangoreactreduxbase_backend_1 /bin/bash scripts/static_validate_backend.sh`
 
 
-## Screenshots
-
-Here are some screenshots of the boilerplate project.
-
-![Screenshot01][1]  
-
-[1]: ./screenshots/screenshot_01.png
-
-![Screenshot02][2]  
-
-[2]: ./screenshots/screenshot_02.png
-
-
 ## Gotchas
 
 * This project uses NodeJS v6.x (stable) and the corresponding version of npm
@@ -165,14 +148,3 @@ Here are some screenshots of the boilerplate project.
 * While testing the backend, if you have a local virtualenv, you can run the static validation without running a docker container.
 * While testing the backend, if you have a local virtualenv and a local database configured with the dev settings, you can run the tests without running a docker container.
 
-
-## Contributing
-
-We welcome contributions from the community, given that they respect these basic guidelines:
-
-* All Tests & Static Analysis passing;
-* 100% code coverage;
-
-Prior to any pull-request, we advise to [open an issue](https://github.com/Seedstars/django-react-redux-base/issues). This is because, although we are happy to merge your code, we must make sure the changes don't impact our way of doing things, thus resulting on a declined PR, and your time wasted.
-
-If you want to tackle any open issue, well..... Just go for it! :)
