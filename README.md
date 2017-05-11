@@ -1,4 +1,4 @@
-#Rental App
+# Rental App
 
 ## Based on "Django React/Redux Base Project"
 
