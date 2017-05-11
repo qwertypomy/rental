@@ -6,7 +6,11 @@ import {
     AUTH_LOGIN_USER_REQUEST,
     AUTH_LOGIN_USER_FAILURE,
     AUTH_LOGIN_USER_SUCCESS,
-    AUTH_LOGOUT_USER
+    AUTH_LOGOUT_USER,
+
+    USER_REGISTRATION_REQUEST,
+    USER_REGISTRATION_FAILURE,
+    USER_REGISTRATION_SUCCESS
 } from '../constants';
 
 
@@ -55,10 +59,29 @@ export function authLogoutAndRedirect() {
     };
 }
 
-export function authLoginUser(email, password, redirect = '/') {
+function catchError(dispatch) {
+  return (error) => {
+    if (error && typeof error.response !== 'undefined' && error.response.status === 401) {
+        // Invalid authentication credentials
+        return error.response.json().then((data) => {
+            dispatch(authLoginUserFailure(401, data.non_field_errors[0]));
+        });
+    } else if (error && typeof error.response !== 'undefined' && error.response.status >= 500) {
+        // Server side error
+        dispatch(authLoginUserFailure(500, 'A server error occurred while sending your data!'));
+    } else {
+        // Most likely connection issues
+        dispatch(authLoginUserFailure('Connection Error', 'An error occurred while sending your data!'));
+    }
+
+    return Promise.resolve(); // TODO: we need a promise here because of the tests, find a better way
+  }
+}
+
+export function authLoginUser(phoneNumber, password, redirect = '/') {
     return (dispatch) => {
         dispatch(authLoginUserRequest());
-        const auth = btoa(`${email}:${password}`);
+        const auth = btoa(`${phoneNumber}:${password}`);
         return fetch(`${SERVER_URL}/api/v1/accounts/login/`, {
             method: 'post',
             headers: {
@@ -73,21 +96,28 @@ export function authLoginUser(email, password, redirect = '/') {
                 dispatch(authLoginUserSuccess(response.token, response.user));
                 dispatch(push(redirect));
             })
-            .catch((error) => {
-                if (error && typeof error.response !== 'undefined' && error.response.status === 401) {
-                    // Invalid authentication credentials
-                    return error.response.json().then((data) => {
-                        dispatch(authLoginUserFailure(401, data.non_field_errors[0]));
-                    });
-                } else if (error && typeof error.response !== 'undefined' && error.response.status >= 500) {
-                    // Server side error
-                    dispatch(authLoginUserFailure(500, 'A server error occurred while sending your data!'));
-                } else {
-                    // Most likely connection issues
-                    dispatch(authLoginUserFailure('Connection Error', 'An error occurred while sending your data!'));
-                }
-
-                return Promise.resolve(); // TODO: we need a promise here because of the tests, find a better way
-            });
+            .catch(catchError(dispatch));
     };
+}
+
+export function authRegisterUser(phoneNumber, firstName, lastName, email, password, redirect = '/') {
+  const sEmail = email?email:'';
+  return (dispatch) => {
+    dispatch(authLoginUserRequest());
+    return fetch(`${SERVER_URL}/api/v1/accounts/register/`, {
+        method: 'post',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ phone_number:phoneNumber, first_name:firstName, last_name:lastName, email:sEmail, password })
+    })
+      .then(checkHttpStatus)
+      .then(parseJSON)
+      .then((response) => {
+          dispatch(authLoginUserSuccess(response.token, response.user));
+          dispatch(push(redirect));
+      })
+      .catch(catchError(dispatch));
+  }
 }

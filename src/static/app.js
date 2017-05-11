@@ -38,6 +38,10 @@ class App extends React.Component {
         const loginClass = classNames({
             active: this.props.pathName === '/login'
         });
+        const registerClass = classNames({
+            active: this.props.pathName === '/register'
+        });
+
 
         return (
             <div className="app">
@@ -56,7 +60,7 @@ class App extends React.Component {
                                 <span className="icon-bar" />
                             </button>
                             <a className="navbar-brand" tabIndex="0" onClick={this.goToIndex}>
-                                Django React Redux Demo
+                                Sport Rental
                             </a>
                         </div>
                         <div className="collapse navbar-collapse" id="top-navbar">
@@ -90,6 +94,9 @@ class App extends React.Component {
                                     </li>
                                     <li className={loginClass}>
                                         <Link className="js-login-button" to="/login">Login</Link>
+                                    </li>
+                                    <li className={registerClass}>
+                                        <Link className="js-register-button" to="/register">Register</Link>
                                     </li>
                                 </ul>
                             }

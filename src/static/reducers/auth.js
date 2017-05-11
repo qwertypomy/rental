@@ -3,12 +3,17 @@ import {
     AUTH_LOGIN_USER_REQUEST,
     AUTH_LOGIN_USER_SUCCESS,
     AUTH_LOGIN_USER_FAILURE,
-    AUTH_LOGOUT_USER
+    AUTH_LOGOUT_USER,
+
+    USER_REGISTRATION_REQUEST,
+    USER_REGISTRATION_FAILURE,
+    USER_REGISTRATION_SUCCESS
 } from '../constants';
 
 
 const initialState = {
     token: null,
+    phoneNumber: null,
     userName: null,
     isAuthenticated: false,
     isAuthenticating: false,
@@ -27,7 +32,8 @@ export default createReducer(initialState, {
             isAuthenticating: false,
             isAuthenticated: true,
             token: payload.token,
-            userName: payload.user.email,
+            userName: payload.user.first_name ? payload.user.first_name : 'User',
+            phoneNumber: payload.user.phone_number,
             statusText: 'You have been successfully logged in.'
         });
     },
@@ -37,6 +43,7 @@ export default createReducer(initialState, {
             isAuthenticated: false,
             token: null,
             userName: null,
+            phoneNumber: null,
             statusText: `Authentication Error: ${payload.status} - ${payload.statusText}`
         });
     },
@@ -45,7 +52,8 @@ export default createReducer(initialState, {
             isAuthenticated: false,
             token: null,
             userName: null,
+            phoneNumber: null,
             statusText: 'You have been successfully logged out.'
         });
-    }
+      },
 });

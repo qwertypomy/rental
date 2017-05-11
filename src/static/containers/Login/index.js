@@ -10,13 +10,13 @@ import * as actionCreators from '../../actions/auth';
 const Form = t.form.Form;
 
 const Login = t.struct({
-    email: t.String,
+    phoneNumber: t.String,
     password: t.String
 });
 
 const LoginFormOptions = {
     auto: 'placeholders',
-    help: <i>Hint: a@a.com / qw</i>,
+    help: <i>Hint: Phone number format: +380*********</i>,
     fields: {
         password: {
             type: 'password'
@@ -50,7 +50,7 @@ class LoginView extends React.Component {
         const redirectRoute = this.props.location ? this.props.location.query.next || '/' : '/';
         this.state = {
             formValues: {
-                email: '',
+                phoneNumber: '',
                 password: ''
             },
             redirectTo: redirectRoute
@@ -71,7 +71,7 @@ class LoginView extends React.Component {
         e.preventDefault();
         const value = this.loginForm.getValue();
         if (value) {
-            this.props.actions.authLoginUser(value.email, value.password, this.state.redirectTo);
+            this.props.actions.authLoginUser(value.phoneNumber, value.password, this.state.redirectTo);
         }
     };
 

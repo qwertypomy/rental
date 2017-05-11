@@ -21,7 +21,13 @@ class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
     authentication_classes = ()
 
     def post(self, request):
-        return self.create(request)
+        user_response = self.create(request)
+        user = User.objects.get(phone_number=user_response.data['phone_number'])
+        token = AuthToken.objects.create(user)
+        return Response({
+            'user': user_response.data,
+            'token': token
+        })
 
 
 class UserViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):
