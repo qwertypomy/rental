@@ -4,28 +4,27 @@ import { push } from 'react-router-redux';
 import { SERVER_URL } from '../utils/config';
 import { checkHttpStatus, parseJSON } from '../utils';
 import { catchError } from  '../utils/catch';
-import { DATA_FETCH_DATA_REQUEST, DATA_RECEIVE_DATA } from '../constants';
+import { CATEGORY_FETCH_DATA_REQUEST, CATEGORY_RECEIVE_DATA } from '../constants';
 import { authLoginUserFailure } from './auth';
 
-
-export function dataReceiveData(data) {
+export function categoryReceiveData(data) {
     return {
-        type: DATA_RECEIVE_DATA,
+        type: CATEGORY_RECEIVE_DATA,
         payload: {
             data
         }
     };
 }
 
-export function dataFetchDataRequest() {
+export function categoryFetchDataRequest() {
     return {
-        type: DATA_FETCH_DATA_REQUEST
+        type: CATEGORY_FETCH_DATA_REQUEST
     };
 }
 
-export function dataFetchData(token, path) {
+export function categoryFetchData(token, path) {
     return (dispatch, state) => {
-        dispatch(dataFetchDataRequest());
+        dispatch(categoryFetchDataRequest());
         return fetch(`${SERVER_URL}/api/v1/${path}/`, {
             credentials: 'include',
             headers: {
@@ -36,15 +35,15 @@ export function dataFetchData(token, path) {
             .then(checkHttpStatus)
             .then(parseJSON)
             .then((response) => {
-                dispatch(dataReceiveData(response.data));
+                dispatch(categoryReceiveData(response));
             })
             .catch(catchError(dispatch));
     };
 }
 
-export function dataPushData(token, path, data) {
+export function categoryPushData(token, path, data) {
     return (dispatch, state) => {
-        dispatch(dataFetchDataRequest());
+        dispatch(categoryFetchDataRequest());
         return fetch(`${SERVER_URL}/api/v1/${path}/`, {
             credentials: 'include',
             headers: {
@@ -56,7 +55,7 @@ export function dataPushData(token, path, data) {
             .then(checkHttpStatus)
             .then(parseJSON)
             .then((response) => {
-                dispatch(dataReceiveData(response.data));
+                dispatch(categoryReceiveData(response.data));
             })
             .catch(catchError(dispatch));
     };

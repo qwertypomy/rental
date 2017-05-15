@@ -10,7 +10,7 @@ class ProtectedView extends React.Component {
         data: React.PropTypes.string,
         token: React.PropTypes.string.isRequired,
         actions: React.PropTypes.shape({
-            dataFetchProtectedData: React.PropTypes.func.isRequired
+            dataFetchData: React.PropTypes.func.isRequired
         }).isRequired
     };
 
@@ -23,7 +23,7 @@ class ProtectedView extends React.Component {
     // Render methods should be a pure function of props and state.
     componentWillMount() {
         const token = this.props.token;
-        this.props.actions.dataFetchProtectedData(token);
+        this.props.actions.dataFetchData(token, 'getdata');
     }
 
     render() {
@@ -46,13 +46,13 @@ class ProtectedView extends React.Component {
                                 <p className="margin-bottom-small">
                                     On the <code>componentWillMount</code> method of the
                                     &nbsp;<code>ProtectedView</code> component, the action
-                                    &nbsp;<code>dataFetchProtectedData</code> is called. This action will first
-                                    dispatch a <code>DATA_FETCH_PROTECTED_DATA_REQUEST</code> action to the Redux
+                                    &nbsp;<code>dataFetchData</code> is called. This action will first
+                                    dispatch a <code>DATA_FETCH_DATA_REQUEST</code> action to the Redux
                                     store. When an action is dispatched to the store, an appropriate reducer for
                                     that specific action will change the state of the store. After that it will then
                                     make an asynchronous request to the server using
                                     the <code>isomorphic-fetch</code> library. On its
-                                    response, it will dispatch the <code>DATA_RECEIVE_PROTECTED_DATA</code> action
+                                    response, it will dispatch the <code>DATA_RECEIVE_DATA</code> action
                                     to the Redux store. In case of wrong credentials in the request, the&nbsp;
                                     <code>AUTH_LOGIN_USER_FAILURE</code> action will be dispatched.
                                 </p>

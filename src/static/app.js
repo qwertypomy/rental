@@ -60,7 +60,7 @@ class App extends React.Component {
                                 <span className="icon-bar" />
                             </button>
                             <a className="navbar-brand" tabIndex="0" onClick={this.goToIndex}>
-                                Sport Rental
+                                Sports Rental
                             </a>
                         </div>
                         <div className="collapse navbar-collapse" id="top-navbar">

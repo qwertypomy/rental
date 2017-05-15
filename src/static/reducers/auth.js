@@ -2,14 +2,9 @@ import { createReducer } from '../utils';
 import {
     AUTH_LOGIN_USER_REQUEST,
     AUTH_LOGIN_USER_SUCCESS,
-    AUTH_LOGIN_USER_FAILURE,
-    AUTH_LOGOUT_USER,
-
-    USER_REGISTRATION_REQUEST,
-    USER_REGISTRATION_FAILURE,
-    USER_REGISTRATION_SUCCESS
+    AUTH_LOGIN_USER_FAILURE,    
+    AUTH_LOGOUT_USER
 } from '../constants';
-
 
 const initialState = {
     token: null,

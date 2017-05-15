@@ -13,7 +13,7 @@ from accounts.models import User
 class Category(models.Model):
     name = models.CharField(max_length=100)
     parent = models.ForeignKey('self', null=True, blank=True, related_name='child')
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(max_length=400, unique=True)
 
     def save(self, *args, **kwargs):
         if self.parent:
