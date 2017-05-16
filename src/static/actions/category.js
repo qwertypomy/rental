@@ -22,14 +22,13 @@ export function categoryFetchDataRequest() {
     };
 }
 
-export function categoryFetchData(token, path) {
+export function categoryFetchData() {
     return (dispatch, state) => {
         dispatch(categoryFetchDataRequest());
-        return fetch(`${SERVER_URL}/api/v1/${path}/`, {
+        return fetch(`${SERVER_URL}/api/v1/categories/`, {
             credentials: 'include',
             headers: {
-                Accept: 'application/json',
-                Authorization: `Token ${token}`
+                Accept: 'application/json'
             }
         })
             .then(checkHttpStatus)
@@ -41,10 +40,10 @@ export function categoryFetchData(token, path) {
     };
 }
 
-export function categoryPushData(token, path, data) {
+export function categoryPushData(token, data) {
     return (dispatch, state) => {
         dispatch(categoryFetchDataRequest());
-        return fetch(`${SERVER_URL}/api/v1/${path}/`, {
+        return fetch(`${SERVER_URL}/api/v1/categories/`, {
             credentials: 'include',
             headers: {
                 Accept: 'application/json',

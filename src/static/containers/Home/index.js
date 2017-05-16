@@ -2,7 +2,9 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { CategoryNavigationView } from '../index';
-import {ProtectedView} from '../index';
+import { ItemListView } from '../index';
+
+
 class HomeView extends React.Component {
 
     static propTypes = {
@@ -20,8 +22,9 @@ class HomeView extends React.Component {
             <div className="container custom-container" >
                 <div className="text-center">
                     <h1>Sports Rental</h1>
-                    <CategoryNavigationView />
                 </div>
+                <CategoryNavigationView />
+                <ItemListView />
             </div>
         );
     }
