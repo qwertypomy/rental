@@ -18,6 +18,6 @@ def is_available(item, date_start, date_out):
 def available_items(items, date_start, date_out):
     if date_start and date_out:
         for item in items:
-            if is_available(item, date_start, date_out):
+            if not is_available(item, date_start, date_out):
                 items = items.exclude(pk=item.pk)
     return items

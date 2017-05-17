@@ -26,20 +26,39 @@ class ItemListView extends React.Component {
     }
 
     componentWillMount() {
-        this.props.actions.itemFetchData();
+        this.props.actions.itemFetchData(this.props.dateRange);
     }
 
+    componentWillReceiveProps(nextProps) {
+      if ((JSON.stringify(this.props.dateRange) !== JSON.stringify(nextProps.dateRange)) || (JSON.stringify(this.props.selectedCategory) !== JSON.stringify(nextProps.selectedCategory))){
+        if (nextProps.selectedCategory) {
+          this.props.actions.itemFetchDataByCategory(nextProps.selectedCategory.url, nextProps.dateRange);
+        } else {
+          this.props.actions.itemFetchData(nextProps.dateRange);
+        }
+
+      }
+    }
+
+    updateUser() {
+      if (this.props.isManager) {
+        this.props.dispatch(actions.fetchAllSites())
+      } else {
+        const currentUserId = this.props.user.get('id')
+        this.props.dispatch(actions.fetchUsersSites(currentUserId))
+      }
+    }
 
     render() {
       return (
           <div className="item-list">
-            <div className="container">
-            {
-              this.props.data && this.props.data.map((item) =>
-                <ItemView key={ item.url } data={item} />
-              )
-            }
-            </div>
+              <div className="card-group">
+              {
+                this.props.data && this.props.data.map((item) =>
+                  <ItemView key={ item.url } data={item} />
+                )
+              }
+              </div>
           </div>
       );
     }
@@ -48,7 +67,9 @@ class ItemListView extends React.Component {
 const mapStateToProps = (state) => {
     return {
         data: state.item.data,
-        isFetching: state.item.isFetching
+        isFetching: state.item.isFetching,
+        dateRange: state.date.dateRange,
+        selectedCategory: state.category.selectedCategory
     };
 };
 

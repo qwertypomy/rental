@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../../actions/category';
-import { itemFetchData, itemFetchDataByCategory} from '../../actions/item';
 import TreeView from '../../components/TreeView';
 
 import './styles.scss';
@@ -23,7 +22,7 @@ class CategoryNavigationView extends React.Component {
 
     constructor (props) {
       super(props);
-      this.handleShowItemsByCategory = this.handleShowItemsByCategory.bind(this);
+      this.handleSelectCategory = this.handleSelectCategory.bind(this);
       this.fillCategory = this.fillCategory.bind(this);
       this.drawCategory = this.drawCategory.bind(this);
     }
@@ -32,10 +31,9 @@ class CategoryNavigationView extends React.Component {
         this.props.actions.categoryFetchData();
     }
 
-    handleShowItemsByCategory(categoryUrl, e) {
+    handleSelectCategory(category, e) {
       e.preventDefault();
-      this.props.actions.itemFetchDataByCategory(categoryUrl);
-      console.log(categoryUrl);
+      this.props.actions.categorySetSelectedCategory(category);
     }
 
     fillCategory(mainCategory, categories) {
@@ -50,13 +48,13 @@ class CategoryNavigationView extends React.Component {
       if (mainCategory.hasOwnProperty('categories')){
         let subCategories = mainCategory.categories.map((category) => this.drawCategory(category));
         return (
-          <TreeView key={mainCategory.slug} nodeLabel={<a onClick={ (e) => this.handleShowItemsByCategory(mainCategory.url, e) } href="#">{mainCategory.name}</a> } defaultCollapsed={false}>
+          <TreeView key={mainCategory.slug} nodeLabel={<a onClick={ (e) => this.handleSelectCategory(mainCategory, e) } href="#">{mainCategory.name}</a> } defaultCollapsed={false}>
             {subCategories}
           </TreeView>
         );
       }
       return(
-        <div className="category" key={mainCategory.slug}><a onClick={ (e) => this.handleShowItemsByCategory(mainCategory.url, e) } href="#">{mainCategory.name}</a></div>
+        <div className="category" key={mainCategory.slug}><a onClick={ (e) => this.handleSelectCategory(mainCategory, e) } href="#">{mainCategory.name}</a></div>
       );
 
     }
@@ -84,13 +82,12 @@ class CategoryNavigationView extends React.Component {
 const mapStateToProps = (state) => {
     return {
         data: state.category.data,
-        isFetching: state.category.isFetching
+        isFetching: state.category.isFetching,
+        dateRange: state.date.dateRange
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    actionCreators.itemFetchData = itemFetchData;
-    actionCreators.itemFetchDataByCategory = itemFetchDataByCategory;
     return {
         actions: bindActionCreators(actionCreators, dispatch)
     };

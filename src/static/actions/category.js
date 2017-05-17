@@ -4,7 +4,7 @@ import { push } from 'react-router-redux';
 import { SERVER_URL } from '../utils/config';
 import { checkHttpStatus, parseJSON } from '../utils';
 import { catchError } from  '../utils/catch';
-import { CATEGORY_FETCH_DATA_REQUEST, CATEGORY_RECEIVE_DATA } from '../constants';
+import { CATEGORY_SET_SELECTED_CATEGORY, CATEGORY_FETCH_DATA_REQUEST, CATEGORY_RECEIVE_DATA } from '../constants';
 import { authLoginUserFailure } from './auth';
 
 export function categoryReceiveData(data) {
@@ -20,6 +20,12 @@ export function categoryFetchDataRequest() {
     return {
         type: CATEGORY_FETCH_DATA_REQUEST
     };
+}
+
+export function categorySetSelectedCategory(selectedCategory) {
+  return (dispatch, state) => {
+    dispatch({ type: CATEGORY_SET_SELECTED_CATEGORY, payload: { selectedCategory } });
+  }
 }
 
 export function categoryFetchData() {
