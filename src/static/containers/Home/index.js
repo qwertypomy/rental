@@ -2,10 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../../actions/date';
-import { CategoryNavigationView } from '../index';
-import { ItemListView } from '../index';
-
+import { CategoryNavigationView, ItemListView, ContactFormView } from '../index';
 import { DateRange } from 'react-date-range';
+import classNames from 'classnames';
 
 class HomeView extends React.Component {
 
@@ -17,11 +16,6 @@ class HomeView extends React.Component {
         }).isRequired
     };
 
-    static defaultProps = {
-        statusText: '',
-        userName: ''
-    };
-
     constructor (props) {
       super(props);
       this.handleDateClick = this.handleDateClick.bind(this);
@@ -29,30 +23,51 @@ class HomeView extends React.Component {
 
     handleDateClick (dateRange) {
       const formatedDateRange = {
-        date_start: dateRange.startDate < dateRange.endDate ? dateRange.startDate.format('YYYY-MM-DD') : dateRange.endDate.format('YYYY-MM-DD'),
-        date_out: dateRange.startDate < dateRange.endDate ? dateRange.endDate.format('YYYY-MM-DD') : dateRange.startDate.format('YYYY-MM-DD')
+        rental_date_start: dateRange.startDate < dateRange.endDate ? dateRange.startDate.format('YYYY-MM-DD') : dateRange.endDate.format('YYYY-MM-DD'),
+        rental_date_out: dateRange.startDate < dateRange.endDate ? dateRange.endDate.format('YYYY-MM-DD') : dateRange.startDate.format('YYYY-MM-DD')
       }
       this.props.actions.dateSetDateRange(formatedDateRange);
     }
 
     render() {
+      let statusText = null;
+      if (this.props.statusText) {
+          const statusTextClassNames = classNames({
+              'alert': true,
+              'alert-danger': this.props.statusText === 'Please fill in the contact form.',
+              'alert-success': this.props.statusText !== 'Please fill in the contact form.'
+          });
+
+          statusText = (
+              <div className="col-sm-12">
+                  <div className={statusTextClassNames + ' text-center'}>
+                      {this.props.statusText}
+                  </div>
+              </div>
+          );
+      }
+
         return (
-          <div className="raw" >
-            <div className="col-md-12">
+          <div>
+            <div className="row" >
+              {statusText}
               <CategoryNavigationView />
-              <div className="col-md-3"></div>
-                <DateRange className="col-md-2"
-  					        onChange={this.handleDateClick}
+              <div className="col-md-2"></div>
+              {this.props.userName && <div className="col-md-1"></div>}
+              <div className="col-md-2">
+                <DateRange
+    				        onChange={this.handleDateClick}
                     calendars={1}
                     twoStepChange={true}
                     format="L"
                 />
+              </div>
+              {!this.props.userName && <ContactFormView />}
             </div>
             <div className="container">
               <ItemListView />
             </div>
-
-        </div>
+          </div>
         );
     }
 }
@@ -60,7 +75,7 @@ class HomeView extends React.Component {
 const mapStateToProps = (state) => {
     return {
         userName: state.auth.userName,
-        statusText: state.auth.statusText,
+        statusText: state.book.statusText,
         dateRange: state.date.dateRange
     };
 };

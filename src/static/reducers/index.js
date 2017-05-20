@@ -5,6 +5,8 @@ import dataReducer from './data';
 import categoryReducer from './category';
 import itemReducer from './item';
 import dateReducer from './date';
+import bookREducer from './book';
+import contactFormReducer from './contactForm';
 
 export default combineReducers({
     auth: authReducer,
@@ -12,5 +14,7 @@ export default combineReducers({
     routing: routerReducer,
     category: categoryReducer,
     item: itemReducer,
-    date: dateReducer
+    date: dateReducer,
+    book: bookREducer,
+    contactForm: contactFormReducer
 });

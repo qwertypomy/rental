@@ -55,7 +55,7 @@ class ItemListView extends React.Component {
               <div className="card-group">
               {
                 this.props.data && this.props.data.map((item) =>
-                  <ItemView key={ item.url } data={item} />
+                  <ItemView key={ item.url } item={item} dateRange={this.props.dateRange} />
                 )
               }
               </div>

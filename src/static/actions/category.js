@@ -41,8 +41,7 @@ export function categoryFetchData() {
             .then(parseJSON)
             .then((response) => {
                 dispatch(categoryReceiveData(response));
-            })
-            .catch(catchError(dispatch));
+            });
     };
 }
 
@@ -61,7 +60,6 @@ export function categoryPushData(token, data) {
             .then(parseJSON)
             .then((response) => {
                 dispatch(categoryReceiveData(response.data));
-            })
-            .catch(catchError(dispatch));
+            });
     };
 }

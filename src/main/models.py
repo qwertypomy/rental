@@ -9,6 +9,7 @@ from django.utils.text import slugify
 
 from accounts.models import User
 
+from phonenumber_field.modelfields import PhoneNumberField
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -77,7 +78,7 @@ class UnauthorisedItemRental(models.Model):
         (STATUS_CANCELED, 'Canceled')
     )
 
-    phone_number = models.CharField(max_length=10, validators=[RegexValidator(r'^\d{1,10}$')])
+    phone_number = PhoneNumberField(unique=True)
     full_name = models.CharField(max_length=50)
     email = models.EmailField(null=True, blank=True)
     item = models.ForeignKey(Item)

@@ -25,10 +25,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
             category = Category.objects.get(pk=pk)
         except:
             return Response(data={'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
-        date_start = request.GET.get('date_start', False)
-        date_out = request.GET.get('date_out', False)
+        rental_date_start = request.GET.get('rental_date_start', False)
+        rental_date_out = request.GET.get('rental_date_out', False)
         items = Item.objects.filter(category__slug__contains=category.slug)
-        items = available_items(items, date_start, date_out)
+        items = available_items(items, rental_date_start, rental_date_out)
 
         page = self.paginate_queryset(items)
         if page is not None:

@@ -36,8 +36,7 @@ export function itemFetchData(params={}) {
             .then(parseJSON)
             .then((response) => {
                 dispatch(itemReceiveData(response));
-            })
-            .catch(catchError(dispatch));
+            });
     };
 }
 
@@ -54,8 +53,7 @@ export function itemFetchDataByCategory(url, params={}) {
           .then(parseJSON)
           .then((response) => {
               dispatch(itemReceiveData(response));
-          })
-          .catch(catchError(dispatch));
+          });
   };
 }
 
@@ -74,7 +72,6 @@ export function itemPushData(token, data) {
             .then(parseJSON)
             .then((response) => {
                 dispatch(itemReceiveData(response.data));
-            })
-            .catch(catchError(dispatch));
+            });
     };
 }
