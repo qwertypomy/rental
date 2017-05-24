@@ -57,6 +57,7 @@ class UserItemRental(models.Model):
     rental_date_out = models.DateField()
     rental_date_returned = models.DateTimeField(null=True, blank=True)
     rental_amount_due = models.IntegerField()
+    created = models.DateTimeField('created', auto_now_add=True)
 
     def save(self, *args, **kwargs):
         time = self.rental_date_out - self.rental_date_start
@@ -78,7 +79,7 @@ class UnauthorisedItemRental(models.Model):
         (STATUS_CANCELED, 'Canceled')
     )
 
-    phone_number = PhoneNumberField(unique=True)
+    phone_number = PhoneNumberField()
     full_name = models.CharField(max_length=50)
     email = models.EmailField(null=True, blank=True)
     item = models.ForeignKey(Item)
@@ -87,6 +88,7 @@ class UnauthorisedItemRental(models.Model):
     rental_date_out = models.DateField()
     rental_date_returned = models.DateTimeField(null=True, blank=True)
     rental_amount_due = models.IntegerField()
+    created = models.DateTimeField('created', auto_now_add=True)
 
     def save(self, *args, **kwargs):
         time = self.rental_date_out - self.rental_date_start

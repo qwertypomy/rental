@@ -45,18 +45,19 @@ class CategoryNavigationView extends React.Component {
     }
 
     drawCategory(mainCategory) {
-      if (mainCategory.hasOwnProperty('categories')){
-        let subCategories = mainCategory.categories.map((category) => this.drawCategory(category));
-        return (
-          <TreeView key={mainCategory.slug} nodeLabel={<a onClick={ (e) => this.handleSelectCategory(mainCategory, e) } href="#">{mainCategory.name}</a> } defaultCollapsed={false}>
-            {subCategories}
-          </TreeView>
+      if (mainCategory){
+        if (mainCategory.hasOwnProperty('categories')){
+          let subCategories = mainCategory.categories.map((category) => this.drawCategory(category));
+          return (
+            <TreeView key={mainCategory.slug} nodeLabel={<a onClick={ (e) => this.handleSelectCategory(mainCategory, e) } href="#">{mainCategory.name}</a> } defaultCollapsed={false}>
+              {subCategories}
+            </TreeView>
+          );
+        }
+        return(
+          <div className="category" key={mainCategory.slug}><a onClick={ (e) => this.handleSelectCategory(mainCategory, e) } href="#">{mainCategory.name}</a></div>
         );
       }
-      return(
-        <div className="category" key={mainCategory.slug}><a onClick={ (e) => this.handleSelectCategory(mainCategory, e) } href="#">{mainCategory.name}</a></div>
-      );
-
     }
 
     render() {

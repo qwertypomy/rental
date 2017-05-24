@@ -24,16 +24,16 @@ class App extends React.Component {
         this.props.dispatch(push('/'));
     };
 
-    goToProtected = () => {
-        this.props.dispatch(push('/protected'));
+    goToProfile = () => {
+        this.props.dispatch(push('/profile'));
     };
 
     render() {
         const homeClass = classNames({
             active: this.props.pathName === '/'
         });
-        const protectedClass = classNames({
-            active: this.props.pathName === '/protected'
+        const profileClass = classNames({
+            active: this.props.pathName === '/profile'
         });
         const loginClass = classNames({
             active: this.props.pathName === '/login'
@@ -71,12 +71,12 @@ class App extends React.Component {
                                             <i className="fa fa-home" /> Home
                                         </a>
                                     </li>
-                                    <li className={protectedClass}>
-                                        <a className="js-go-to-protected-button"
+                                    <li className={profileClass}>
+                                        <a className="js-go-to-profile-button"
                                            tabIndex="0"
-                                           onClick={this.goToProtected}
+                                           onClick={this.goToProfile}
                                         >
-                                            <i className="fa fa-lock" /> Protected
+                                            <i className="fa fa-user" /> Profile
                                         </a>
                                     </li>
                                     <li>

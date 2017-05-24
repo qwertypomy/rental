@@ -7,9 +7,10 @@ import {
     AUTH_LOGIN_USER_REQUEST,
     AUTH_LOGIN_USER_FAILURE,
     AUTH_LOGIN_USER_SUCCESS,
-    AUTH_LOGOUT_USER
+    AUTH_LOGOUT_USER,
+    AUTH_EDIT_USER_SUCCESS
 } from '../constants';
-
+import { accountInfoToggleButton } from './auth';
 
 export function authLoginUserSuccess(token, user) {
     sessionStorage.setItem('token', token);
@@ -18,6 +19,16 @@ export function authLoginUserSuccess(token, user) {
         type: AUTH_LOGIN_USER_SUCCESS,
         payload: {
             token,
+            user
+        }
+    };
+}
+
+export function authEditUserSuccess(user) {
+    sessionStorage.setItem('user', JSON.stringify(user));
+    return {
+        type: AUTH_EDIT_USER_SUCCESS,
+        payload: {
             user
         }
     };
@@ -95,6 +106,27 @@ export function authRegisterUser(phoneNumber, firstName, lastName, email, passwo
       .then((response) => {
           dispatch(authLoginUserSuccess(response.token, response.user));
           dispatch(push(redirect));
+      })
+      .catch(catchError(dispatch));
+  }
+}
+
+export function authEditUser(url, firstName, lastName, email) {
+  return (dispatch) => {
+    dispatch(authLoginUserRequest());
+    return fetch(url, {
+        method: 'put',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ first_name:firstName, last_name:lastName, email })
+    })
+      .then(checkHttpStatus)
+      .then(parseJSON)
+      .then((response) => {
+          dispatch(authEditUserSuccess(response.token, response.user));
+          dispatch(accountInfoToggleButton());
       })
       .catch(catchError(dispatch));
   }

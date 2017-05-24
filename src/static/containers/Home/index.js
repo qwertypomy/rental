@@ -34,8 +34,8 @@ class HomeView extends React.Component {
       if (this.props.statusText) {
           const statusTextClassNames = classNames({
               'alert': true,
-              'alert-danger': this.props.statusText === 'Please fill in the contact form.',
-              'alert-success': this.props.statusText !== 'Please fill in the contact form.'
+              'alert-danger': this.props.statusText.indexOf('Please')===0,
+              'alert-success': this.props.statusText.indexOf('Please')!==0
           });
 
           statusText = (
@@ -74,7 +74,7 @@ class HomeView extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        userName: state.auth.userName,
+        userName: state.auth.data ? state.auth.data.userName : null,
         statusText: state.book.statusText,
         dateRange: state.date.dateRange
     };

@@ -22,16 +22,19 @@ class ItemView extends React.Component {
     this.handleBookClick = this.handleBookClick.bind(this);
   }
 
+  componentWillUnmount() {
+    this.props.actions.bookChangeStatus('');
+  }
+
   handleBookClick(url, dateRange, e) {
     e.preventDefault();
     let data = { item: url, ...dateRange };
-
-    if (this.props.token) {
+    if (!dateRange.hasOwnProperty('rental_date_start')) {
+      this.props.actions.bookChangeStatus("Please select the date range.");
+    } else if (this.props.token) {
       this.props.actions.bookCreateUserItemRental(this.props.token, data);
     } else if (this.props.formValues) {
-      console.log(data);
       data = { ...data, ...this.props.formValues };
-      console.log(data);
       this.props.actions.bookCreateUnauthorisedItemRental(data);
     } else {
       this.props.actions.bookChangeStatus("Please fill in the contact form.");
@@ -41,15 +44,22 @@ class ItemView extends React.Component {
   render() {
     const { url, name, description, daily_rate, attributes } = this.props.item;
     const { dateRange } = this.props;
-
     return (
       <div className="card col-md-3">
         <img className="card-img-top" src={attributes.imgs[0]} alt="Card image cap"/>
         <div className="card-block">
           <h4 className="card-title">{name}</h4>
           <p className="card-text">{description}</p>
-          <h6 className="card-subtitle mb-2 text-muted">{daily_rate + " UAH/Day"}</h6>
-          <a href="#" className="btn btn-primary" onClick={(e) => this.handleBookClick(url, dateRange, e)} >Book</a>
+          {
+            Object.keys(attributes).map((key, index) => {
+              if(key!='imgs') {
+                return <p className="attribute text-muted" key={index}>{key + ': ' + attributes[key]}</p>;
+              }
+            }
+            )
+          }
+          <p className="card-subtitle mb-2 text-info">{daily_rate + " UAH/Day"}</p>
+          <a href="#" disabled={this.props.isFetching} className="btn btn-primary pull-right pull-bottom" onClick={(e) => this.handleBookClick(url, dateRange, e)} >Book</a>
         </div>
       </div>
     );
@@ -59,7 +69,7 @@ class ItemView extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        token: state.auth.token,
+        token: state.auth.data ? state.auth.data.token : '',
         formValues: state.contactForm.formValues,
         isFetching: state.book.isFetching
     };

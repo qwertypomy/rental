@@ -2,17 +2,15 @@ import { createReducer } from '../utils';
 import {
     AUTH_LOGIN_USER_REQUEST,
     AUTH_LOGIN_USER_SUCCESS,
-    AUTH_LOGIN_USER_FAILURE,    
-    AUTH_LOGOUT_USER
+    AUTH_LOGIN_USER_FAILURE,
+    AUTH_LOGOUT_USER,
+    AUTH_EDIT_USER_SUCCESS
 } from '../constants';
 
 const initialState = {
-    token: null,
-    phoneNumber: null,
-    userName: null,
+    data: null,
     isAuthenticated: false,
-    isAuthenticating: false,
-    statusText: null
+    isAuthenticating: false
 };
 
 export default createReducer(initialState, {
@@ -26,28 +24,46 @@ export default createReducer(initialState, {
         return Object.assign({}, state, {
             isAuthenticating: false,
             isAuthenticated: true,
-            token: payload.token,
-            userName: payload.user.first_name ? payload.user.first_name : 'User',
-            phoneNumber: payload.user.phone_number,
+            data: {
+              token: payload.token,
+              url: payload.url,
+              userName: payload.user.first_name ? payload.user.first_name : 'User',
+              phoneNumber: payload.user.phone_number,
+              firstName: payload.user.first_name,
+              lastName: payload.user.last_name,
+              email: payload.user.email,
+            },
             statusText: 'You have been successfully logged in.'
         });
     },
+    [AUTH_EDIT_USER_SUCCESS]: (state, payload) => {
+        return Object.assign({}, state, {
+            isAuthenticating: false,
+            isAuthenticated: true,
+            data: {
+              ...state.data,
+              userName: payload.user.first_name ? payload.user.first_name : 'User',
+              phoneNumber: payload.user.phone_number,
+              firstName: payload.user.first_name,
+              lastName: payload.user.last_name,
+              email: payload.user.email,
+            },
+            statusText: 'Your account information have been successfully changed.'
+        });
+    },
+
     [AUTH_LOGIN_USER_FAILURE]: (state, payload) => {
         return Object.assign({}, state, {
             isAuthenticating: false,
             isAuthenticated: false,
-            token: null,
-            userName: null,
-            phoneNumber: null,
+            data: null,
             statusText: `Authentication Error: ${payload.status} - ${payload.statusText}`
         });
     },
     [AUTH_LOGOUT_USER]: (state, payload) => {
         return Object.assign({}, state, {
             isAuthenticated: false,
-            token: null,
-            userName: null,
-            phoneNumber: null,
+            data:null,
             statusText: 'You have been successfully logged out.'
         });
       },

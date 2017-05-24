@@ -5,7 +5,7 @@ from knox.models import AuthToken
 from rest_framework import status
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, ListModelMixin, DestroyModelMixin
+from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, ListModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -30,7 +30,7 @@ class UserRegisterView(AtomicMixin, CreateModelMixin, GenericAPIView):
         })
 
 
-class UserViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):
+class UserViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = (IsStaffOrTargetUser,)
@@ -38,6 +38,8 @@ class UserViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyM
 
 class CurrentUserView(APIView):
     def get(self, request):
+        if request.user.is_anonymous:
+            return Response("You are not logged in.")
         serializer = UserSerializer(request.user, context={'request': request})
         return Response(serializer.data)
 

@@ -33,16 +33,16 @@ class UserItemRentalSerializer(BaseRentalSerializer):
     class Meta:
         model = UserItemRental
         fields = ('url', 'user', 'item', 'status', 'rental_date_start', 'rental_date_out', 'rental_date_returned',
-                  'rental_amount_due')
-        read_only_fields = ['status', 'user', 'rental_date_returned', 'rental_amount_due']
+                  'rental_amount_due', 'created')
+        read_only_fields = ['status', 'user', 'rental_date_returned', 'rental_amount_due', 'created']
 
 
 class AdminUserItemRentalSerializer(BaseRentalSerializer):
     class Meta:
         model = UserItemRental
         fields = ('url', 'user', 'item', 'status', 'rental_date_start', 'rental_date_out', 'rental_date_returned',
-                  'rental_amount_due')
-        read_only_fields = ['user', 'rental_date_returned', 'rental_amount_due']
+                  'rental_amount_due', 'created')
+        read_only_fields = ['user', 'rental_date_returned', 'rental_amount_due', 'created']
 
 
 class UnauthorisedItemRentalSerializer(BaseRentalSerializer):
@@ -50,6 +50,6 @@ class UnauthorisedItemRentalSerializer(BaseRentalSerializer):
     class Meta:
         model = UnauthorisedItemRental
         fields = ('url', 'full_name', 'phone_number', 'email', 'item', 'status', 'rental_date_start',
-                  'rental_date_out', 'rental_date_returned', 'rental_amount_due')
-        read_only_fields = ['status', 'user', 'rental_date_returned', 'rental_amount_due']
+                  'rental_date_out', 'rental_date_returned', 'rental_amount_due', 'created')
+        read_only_fields = ['status', 'user', 'rental_date_returned', 'rental_amount_due', 'created']
 

@@ -43,7 +43,7 @@ export default function requireAuthentication(Component) {
     const mapStateToProps = (state) => {
         return {
             isAuthenticated: state.auth.isAuthenticated,
-            token: state.auth.token
+            token: state.auth.data.token
         };
     };
 

@@ -5,6 +5,7 @@ import { push } from 'react-router-redux';
 import t from 'tcomb-form';
 
 import * as actionCreators from '../../actions/contactForm';
+import {bookChangeStatus} from '../../actions/book';
 
 const Form = t.form.Form;
 
@@ -28,11 +29,15 @@ class ContactFormView extends React.Component {
   static propTypes = {
       dispatch: React.PropTypes.func.isRequired,
       actions: React.PropTypes.shape({
-          contactFormSetValues: React.PropTypes.func.isRequired
+          contactFormSetValues: React.PropTypes.func.isRequired,
+          bookChangeStatus: React.PropTypes.func.isRequired
       }).isRequired
   };
 
   onFormChange = (value) => {
+    if (this.props.statusText){
+      this.props.actions.bookChangeStatus('');
+    }
       this.props.actions.contactFormSetValues(value);
   };
 
@@ -55,7 +60,8 @@ class ContactFormView extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-      formValues: state.contactForm.formValues
+      formValues: state.contactForm.formValues,
+      statusText: state.book.statusText
   };
 };
 
@@ -63,7 +69,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
       dispatch,
-      actions: bindActionCreators(actionCreators, dispatch)
+      actions: bindActionCreators({...actionCreators, bookChangeStatus}, dispatch)
   };
 };
 

@@ -4,7 +4,7 @@ import { push } from 'react-router-redux';
 import { SERVER_URL } from '../utils/config';
 import { checkHttpStatus, parseJSON } from '../utils';
 import { catchError } from  '../utils/catch';
-import { BOOK_SET_STATUS, BOOK_PUSH_DATA_REQUEST, BOOK_RECEIVE_DATA } from '../constants';
+import { BOOK_SET_STATUS, BOOK_FETCH_DATA_REQUEST, BOOK_RECEIVE_DATA } from '../constants';
 import { authLoginUserFailure } from './auth';
 
 
@@ -18,26 +18,25 @@ export function bookChangeStatus(statusText) {
   }
 }
 
-export function bookReceiveData(data) {
+export function bookReceiveData(data, statusText='') {
     return {
         type: BOOK_RECEIVE_DATA,
         payload: {
             data,
-            statusText: "Reservation successfully completed."
+            statusText
         }
     };
 }
 
-export function bookPushDataRequest() {
+export function bookFetchDataRequest() {
     return {
-        type: BOOK_PUSH_DATA_REQUEST
+        type: BOOK_FETCH_DATA_REQUEST
     };
 }
 
 export function bookCreateUnauthorisedItemRental(data) {
-  console.log(JSON.stringify(data));
   return (dispatch, state) => {
-      dispatch(bookPushDataRequest());
+      dispatch(bookFetchDataRequest());
       return fetch(`${SERVER_URL}/api/v1/rentals-unauthorised/`, {
           method: 'post',
           credentials: 'include',
@@ -50,14 +49,16 @@ export function bookCreateUnauthorisedItemRental(data) {
           .then(checkHttpStatus)
           .then(parseJSON)
           .then((response) => {
-              dispatch(bookReceiveData(response.data));
+              dispatch(bookReceiveData(response, "The reservation is successfully completed!"));
           });
   };
 }
 
 export function bookCreateUserItemRental(token, data) {
+  console.log(token);
+  console.log(JSON.stringify(data));
   return (dispatch, state) => {
-      dispatch(bookPushDataRequest());
+      dispatch(bookFetchDataRequest());
       return fetch(`${SERVER_URL}/api/v1/rentals/`, {
           method: 'post',
           credentials: 'include',
@@ -71,7 +72,24 @@ export function bookCreateUserItemRental(token, data) {
           .then(checkHttpStatus)
           .then(parseJSON)
           .then((response) => {
-              dispatch(bookReceiveData(response.data));
+              dispatch(bookReceiveData(response, "The reservation is successfully completed!"));
           });
   };
+}
+
+export function bookFetchData() {
+    return (dispatch, state) => {
+        dispatch(bookFetchDataRequest());
+        return fetch(`${SERVER_URL}/api/v1/rentals/`, {
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json'
+            }
+        })
+            .then(checkHttpStatus)
+            .then(parseJSON)
+            .then((response) => {
+                dispatch(bookReceiveData(response));
+            });
+    };
 }

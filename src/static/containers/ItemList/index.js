@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../../actions/item';
-import ItemView from '../../components/Item';
+import {ItemView} from '../index';
 
 
 class ItemListView extends React.Component {
@@ -19,11 +19,6 @@ class ItemListView extends React.Component {
     static defaultProps = {
         data: []
     };
-
-    constructor (props) {
-      super(props);
-
-    }
 
     componentWillMount() {
         this.props.actions.itemFetchData(this.props.dateRange);

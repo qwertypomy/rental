@@ -7,6 +7,7 @@ import itemReducer from './item';
 import dateReducer from './date';
 import bookREducer from './book';
 import contactFormReducer from './contactForm';
+import accountInfoReducer from './accountInfo';
 
 export default combineReducers({
     auth: authReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
     item: itemReducer,
     date: dateReducer,
     book: bookREducer,
-    contactForm: contactFormReducer
+    contactForm: contactFormReducer,
+    accountInfo: accountInfoReducer
 });
