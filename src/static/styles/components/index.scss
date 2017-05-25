@@ -1,6 +1,5 @@
 .card {
   border: 1px solid #f7f7f9;
-  height: 22em;
   img {
     max-width: 100%;
     max-height: 10em;
@@ -12,5 +11,17 @@
       right: 0;
       margin: 1em;
     }
+  }
+}
+
+.item-list {
+  .card {
+    height: 22em;
+  }
+}
+
+.booked-item-list {
+  .card {
+    height: 25em;
   }
 }

@@ -1,5 +1,5 @@
 import { createReducer } from '../utils';
-import { BOOK_SET_STATUS, BOOK_FETCH_DATA_REQUEST, BOOK_RECEIVE_DATA } from '../constants';
+import { BOOK_SET_STATUS, BOOK_FETCH_DATA_REQUEST, BOOK_RECEIVE_DATA, BOOK_SET_BOOK } from '../constants';
 
 const initialState = {
     isFetching: false,
@@ -18,6 +18,16 @@ export default createReducer(initialState, {
             statusText: payload.statusText,
             isFetching: false,
             data: payload.data
+        });
+    },
+    [BOOK_SET_BOOK]: (state, payload) => {
+        let bookIndex = state.data.findIndex((book) => book.url!=payload.data.url);
+        let data = state.data;
+        data[bookIndex] = payload.data;
+        return Object.assign({}, state, {
+            ...state,
+            isFetching: false,
+            data
         });
     },
     [BOOK_FETCH_DATA_REQUEST]: (state, payload) => {

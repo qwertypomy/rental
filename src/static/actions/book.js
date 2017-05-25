@@ -4,7 +4,7 @@ import { push } from 'react-router-redux';
 import { SERVER_URL } from '../utils/config';
 import { checkHttpStatus, parseJSON } from '../utils';
 import { catchError } from  '../utils/catch';
-import { BOOK_SET_STATUS, BOOK_FETCH_DATA_REQUEST, BOOK_RECEIVE_DATA } from '../constants';
+import { BOOK_SET_STATUS, BOOK_FETCH_DATA_REQUEST, BOOK_RECEIVE_DATA, BOOK_SET_BOOK } from '../constants';
 import { authLoginUserFailure } from './auth';
 
 
@@ -24,6 +24,15 @@ export function bookReceiveData(data, statusText='') {
         payload: {
             data,
             statusText
+        }
+    };
+}
+
+export function bookSetBook(data) {
+    return {
+        type: BOOK_SET_BOOK,
+        payload: {
+            data
         }
     };
 }
@@ -55,8 +64,6 @@ export function bookCreateUnauthorisedItemRental(data) {
 }
 
 export function bookCreateUserItemRental(token, data) {
-  console.log(token);
-  console.log(JSON.stringify(data));
   return (dispatch, state) => {
       dispatch(bookFetchDataRequest());
       return fetch(`${SERVER_URL}/api/v1/rentals/`, {
@@ -77,13 +84,15 @@ export function bookCreateUserItemRental(token, data) {
   };
 }
 
-export function bookFetchData() {
+export function bookFetchData(token) {
     return (dispatch, state) => {
         dispatch(bookFetchDataRequest());
         return fetch(`${SERVER_URL}/api/v1/rentals/`, {
             credentials: 'include',
             headers: {
-                Accept: 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             }
         })
             .then(checkHttpStatus)
@@ -92,4 +101,26 @@ export function bookFetchData() {
                 dispatch(bookReceiveData(response));
             });
     };
+}
+
+export function bookEditRental(url, token, data) {
+  console.log(JSON.stringify(data));
+  return (dispatch, state) => {
+      dispatch(bookFetchDataRequest());
+      return fetch(url, {
+          method: 'put',
+          credentials: 'include',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${token}`
+          },
+          body: JSON.stringify(data)
+      })
+          .then(checkHttpStatus)
+          .then(parseJSON)
+          .then((response) => {
+              dispatch(bookSetBook(response));
+          });
+  };
 }

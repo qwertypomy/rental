@@ -26,12 +26,13 @@ export default createReducer(initialState, {
             isAuthenticated: true,
             data: {
               token: payload.token,
-              url: payload.url,
+              url: payload.user.url,
               userName: payload.user.first_name ? payload.user.first_name : 'User',
               phoneNumber: payload.user.phone_number,
               firstName: payload.user.first_name,
               lastName: payload.user.last_name,
               email: payload.user.email,
+              isStaff: payload.user.is_staff,
             },
             statusText: 'You have been successfully logged in.'
         });

@@ -35,15 +35,6 @@ class ItemListView extends React.Component {
       }
     }
 
-    updateUser() {
-      if (this.props.isManager) {
-        this.props.dispatch(actions.fetchAllSites())
-      } else {
-        const currentUserId = this.props.user.get('id')
-        this.props.dispatch(actions.fetchUsersSites(currentUserId))
-      }
-    }
-
     render() {
       return (
           <div className="item-list">

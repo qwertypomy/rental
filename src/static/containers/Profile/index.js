@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 
 import { AccountInfoView, BookedItemListView }  from '../index';
 
-const ACCOUNT_INFO = 'Account Information';
-const BOOKED_ITEMS = 'Booked Items';
+import { ACCOUNT_INFO, BOOKED_ITEMS } from '../../constants';
 
 class ProfileView extends React.Component {
 
@@ -29,12 +28,12 @@ class ProfileView extends React.Component {
   render() {
     return (
       <div className="profile">
-        <a href="#" className="btn btn-primary"
-          disabled={this.props.bookIsFetching || this.props.authIsFetching}
-          onClick={(e) => this.handleClick(e)} >
-          {this.state.button_text}
-        </a>
         <div className="container">
+          <a href="#" className="btn btn-primary"
+            disabled={this.props.bookIsFetching || this.props.authIsFetching}
+            onClick={(e) => this.handleClick(e)} >
+            {this.state.button_text}
+          </a>
           {this.state.button_text==BOOKED_ITEMS && <AccountInfoView />}
           {this.state.button_text==ACCOUNT_INFO && <BookedItemListView />}
         </div>

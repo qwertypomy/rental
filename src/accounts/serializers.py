@@ -7,7 +7,8 @@ from lib.utils import validate_email as email_is_valid
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'phone_number', 'email', 'first_name', 'last_name',)
+        fields = ('url', 'phone_number', 'email', 'first_name', 'last_name', 'is_staff')
+        read_only_fields = ['url', 'phone_number', 'is_staff']
 
 
 class UserRegistrationSerializer(serializers.HyperlinkedModelSerializer):

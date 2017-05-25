@@ -10,7 +10,7 @@ import {
     AUTH_LOGOUT_USER,
     AUTH_EDIT_USER_SUCCESS
 } from '../constants';
-import { accountInfoToggleButton } from './auth';
+import { accountInfoToggleButton } from './accountInfo';
 
 export function authLoginUserSuccess(token, user) {
     sessionStorage.setItem('token', token);
@@ -111,7 +111,8 @@ export function authRegisterUser(phoneNumber, firstName, lastName, email, passwo
   }
 }
 
-export function authEditUser(url, firstName, lastName, email) {
+export function authEditUser(url, token, firstName, lastName, email) {
+  const sEmail = email?email:'';
   return (dispatch) => {
     dispatch(authLoginUserRequest());
     return fetch(url, {
@@ -119,15 +120,15 @@ export function authEditUser(url, firstName, lastName, email) {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
         },
-        body: JSON.stringify({ first_name:firstName, last_name:lastName, email })
+        body: JSON.stringify({ first_name:firstName, last_name:lastName, email:sEmail })
     })
       .then(checkHttpStatus)
       .then(parseJSON)
       .then((response) => {
-          dispatch(authEditUserSuccess(response.token, response.user));
+          dispatch(authEditUserSuccess(response));
           dispatch(accountInfoToggleButton());
       })
-      .catch(catchError(dispatch));
   }
 }

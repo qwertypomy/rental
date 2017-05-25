@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../../actions/book';
 
-import './styles.scss';
-
 class ItemView extends React.Component {
   static propTypes = {
       isFetching: React.PropTypes.bool.isRequired,
@@ -17,7 +15,7 @@ class ItemView extends React.Component {
       }).isRequired
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.handleBookClick = this.handleBookClick.bind(this);
   }

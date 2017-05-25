@@ -7,7 +7,7 @@ from rest_framework.decorators import list_route
 
 
 from main.serializers import CategorySerializer, ItemSerializer, UserItemRentalSerializer, \
-    UnauthorisedItemRentalSerializer, AdminUserItemRentalSerializer
+    UnauthorisedItemRentalSerializer, UserItemRentalPutSerializer
 from main.models import Category, Item, UserItemRental, UnauthorisedItemRental
 from main.utils import available_items
 
@@ -53,8 +53,8 @@ class UserItemRentalViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated() if (self.request.method == 'GET' or self.request.method == 'POST') else IsAdminUser()]
 
     def get_serializer_class(self):
-        if self.request.user.is_staff:
-            return AdminUserItemRentalSerializer
+        if self.request.method == 'PUT':
+            return UserItemRentalPutSerializer
         return UserItemRentalSerializer
 
     def get_queryset(self):

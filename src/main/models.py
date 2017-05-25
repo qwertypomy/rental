@@ -43,11 +43,13 @@ class UserItemRental(models.Model):
     STATUS_CONFIRMED = 'C'
     STATUS_IN_PROCESS = 'P'
     STATUS_COMPLETED = 'F'
+    STATUS_CANCELED = '-'
     STATUS_CHOICES = (
         (STATUS_NEW, 'New'),
         (STATUS_CONFIRMED, 'Confirmed'),
         (STATUS_IN_PROCESS, 'In process'),
-        (STATUS_COMPLETED, 'Completed')
+        (STATUS_COMPLETED, 'Completed'),
+        (STATUS_CANCELED, 'Canceled')
     )
 
     user = models.ForeignKey(User)
