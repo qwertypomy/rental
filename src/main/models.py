@@ -43,7 +43,7 @@ class UserItemRental(models.Model):
     STATUS_CONFIRMED = 'C'
     STATUS_IN_PROCESS = 'P'
     STATUS_COMPLETED = 'F'
-    STATUS_CANCELED = '-'
+    STATUS_CANCELED = 'E'
     STATUS_CHOICES = (
         (STATUS_NEW, 'New'),
         (STATUS_CONFIRMED, 'Confirmed'),
@@ -71,8 +71,8 @@ class UnauthorisedItemRental(models.Model):
     STATUS_NEW = 'N'
     STATUS_CONFIRMED = 'C'
     STATUS_IN_PROCESS = 'P'
-    STATUS_COMPLETED = '+'
-    STATUS_CANCELED = '-'
+    STATUS_COMPLETED = 'F'
+    STATUS_CANCELED = 'E'
     STATUS_CHOICES = (
         (STATUS_NEW, 'New'),
         (STATUS_CONFIRMED, 'Confirmed'),

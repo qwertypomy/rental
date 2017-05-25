@@ -25,8 +25,8 @@ export const AUTH_EDIT_USER_SUCCESS = 'AUTH_EDIT_USER_SUCCESS';
 
 export const ACCOUNT_INFO_TOGGLE_BUTTON = 'ACCOUNT_INFO_TOGGLE_BUTTON';
 
-export const EDIT = 'EDIT';
-export const SAVE = 'SAVE';
+export const EDIT = 'Edit';
+export const SAVE = 'Save';
 export const ACCOUNT_INFO = 'Account information';
 export const BOOKED_ITEMS = 'Booked items';
 

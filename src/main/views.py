@@ -53,7 +53,7 @@ class UserItemRentalViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated() if (self.request.method == 'GET' or self.request.method == 'POST') else IsAdminUser()]
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
+        if self.request.method == 'PUT' or 'PATCH':
             return UserItemRentalPutSerializer
         return UserItemRentalSerializer
 

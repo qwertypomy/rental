@@ -21,13 +21,20 @@ export default createReducer(initialState, {
         });
     },
     [BOOK_SET_BOOK]: (state, payload) => {
-        let bookIndex = state.data.findIndex((book) => book.url!=payload.data.url);
+      console.log(payload.data);
+        let bookIndex = state.data.findIndex((book) => book.url==payload.data.url);
         let data = state.data;
+        console.log('state.data: ', data);
         data[bookIndex] = payload.data;
-        return Object.assign({}, state, {
-            ...state,
+        console.log({
+            statusText:'',
             isFetching: false,
-            data
+            data: data
+        });
+        return Object.assign({}, state, {
+            statusText:'',
+            isFetching: false,
+            data: data
         });
     },
     [BOOK_FETCH_DATA_REQUEST]: (state, payload) => {

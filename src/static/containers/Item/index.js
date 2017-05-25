@@ -57,7 +57,7 @@ class ItemView extends React.Component {
             )
           }
           <p className="card-subtitle mb-2 text-info">{daily_rate + " UAH/Day"}</p>
-          <a href="#" disabled={this.props.isFetching} className="btn btn-primary pull-right pull-bottom" onClick={(e) => this.handleBookClick(url, dateRange, e)} >Book</a>
+          <a href="#" disabled={this.props.isFetching} className="btn btn-primary" onClick={(e) => this.handleBookClick(url, dateRange, e)} >Book</a>
         </div>
       </div>
     );

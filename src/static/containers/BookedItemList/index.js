@@ -13,8 +13,13 @@ class BookedItemListView extends React.Component {
     this.props.actions.bookFetchData(this.props.token);
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log('nextProps:',nextProps);
+  }
+
   render() {
     const { bookData, itemData, isStaff } = this.props;
+    console.log('bookData: ',bookData);
     return (
       <div className="booked-item-list margin-top-medium">
         <div className="card-group">

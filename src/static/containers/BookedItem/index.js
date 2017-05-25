@@ -7,11 +7,13 @@ class BookedItemView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      changeButton: true
+      changeButton: true,
+      selectedValue: this.props.book.status
     };
     this.convertStatus = this.convertStatus.bind(this);
     this.renderButton = this.renderButton.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   convertStatus(status) {
@@ -19,40 +21,54 @@ class BookedItemView extends React.Component {
       case 'N': return 'Waiting for confirmation.';
       case 'C': return 'Confirmed, waiting for you.';
       case 'P': return 'Is given to you.';
-      case '+': return 'Completed(Returned).';
-      case '-': return 'Canceled.';
+      case 'F': return 'Completed(Returned).';
+      case 'E': return 'Canceled.';
       default: return 'ERROR: status = ' + status;
     }
   }
 
+  handleChange(event) {
+    this.setState({selectedValue: event.target.value});
+  }
+
   renderButton() {
-    var new_status = 'P'; // TODO: выпадающий список с выбором статуса
-    //TODO: ререндерить измененный Book ---- componentWillReceiveProps
+    //TODO: ререндерить измененный Book ---- ?? componentWillReceiveProps
+    //TODO: Отображать юзера
     if (this.state.changeButton) {
       return (
         <a href="#" disabled={this.props.isFetching}
-          className="btn btn-primary pull-right pull-bottom"
-          onClick={(e) => this.handleButtonClick(new_status, e)} >
+          className="btn btn-primary"
+          onClick={(e) => this.handleButtonClick(e)} >
           Change Status
         </a>
       );
     } else {
       return (
-        <a href="#" disabled={this.props.isFetching}
-          className="btn btn-primary pull-right pull-bottom"
-          onClick={(e) => this.handleButtonClick(new_status, e)} >
-          Submit
-        </a>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            <select className="form-control"
+              value={this.state.selectedValue}
+              onChange={this.handleChange}>
+              <option value="N">Waiting for confirmation.</option>
+              <option value="C">Confirmed, waiting for you.</option>
+              <option value="P">Is given to you.</option>
+              <option value="F">Completed(Returned).</option>
+              <option value="E">Canceled.</option>
+            </select>
+          </label>
+          <input className="btn btn-default" type="submit" value="Save"
+            onClick={(e) => this.handleButtonClick(e)}/>
+      </form>
       );
     }
   }
 
-  handleButtonClick(new_status, e) {
+  handleButtonClick(e) {
     e.preventDefault();
     const { book, token } = this.props;
     if (!this.state.changeButton) {
       this.setState({changeButton: false});
-      this.props.actions.bookEditRental(book.url, token, {status:new_status}).then(
+      this.props.actions.bookEditRental(book.url, token, {status:this.state.selectedValue}).then(
         this.setState({changeButton: true})
       );
     } else {
@@ -64,7 +80,7 @@ class BookedItemView extends React.Component {
   render() {
     const { item, book, isStaff } = this.props;
     return (
-      <div className="card col-md-3">
+      <div className="card col-md-4">
         <img className="card-img-top" src={item.attributes.imgs[0]} alt="Card image cap"/>
         <div className="card-block">
           <h4 className="card-title">{item.name}</h4>
