@@ -93,7 +93,12 @@ class AllRentalView(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request):
-        data = UserItemRentalSerializer(UserItemRental.objects.all(), context={'request': request}, many=True).data + \
-                     UnauthorisedItemRentalSerializer(UnauthorisedItemRental.objects.all(), context={'request': request}, many=True).data
+        params_status = request.query_params.get('status', False);
+        if params_status:
+            data = UserItemRentalSerializer(UserItemRental.objects.filter(status=params_status), context={'request': request}, many=True).data + \
+                   UnauthorisedItemRentalSerializer(UnauthorisedItemRental.objects.filter(status=params_status), context={'request': request}, many=True).data
+        else:
+            data = UserItemRentalSerializer(UserItemRental.objects.all(), context={'request': request}, many=True).data + \
+                         UnauthorisedItemRentalSerializer(UnauthorisedItemRental.objects.all(), context={'request': request}, many=True).data
         data.sort(key=lambda x: x['created'], reverse=True)
         return Response(data)

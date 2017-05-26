@@ -6,7 +6,7 @@ import { checkHttpStatus, parseJSON } from '../utils';
 import { catchError } from  '../utils/catch';
 import { BOOK_SET_STATUS, BOOK_FETCH_DATA_REQUEST, BOOK_RECEIVE_DATA, BOOK_SET_BOOK } from '../constants';
 import { authLoginUserFailure } from './auth';
-
+import { queryString } from  '../utils/request';
 
 function bookSetStatus(statusText) {
   return { type: BOOK_SET_STATUS, payload: { statusText } }
@@ -103,10 +103,11 @@ export function bookFetchUserRentals(token) {
     };
 }
 
-export function bookFetchAllRentals(token) {
+export function bookFetchAllRentals(token, params={}) {
+  console.log(`${SERVER_URL}/api/v1/all-rentals/${queryString(params)}`);
     return (dispatch, state) => {
         dispatch(bookFetchUserRentalsRequest());
-        return fetch(`${SERVER_URL}/api/v1/all-rentals/`, {
+        return fetch(`${SERVER_URL}/api/v1/all-rentals/${queryString(params)}`, {
             credentials: 'include',
             headers: {
                 'Accept': 'application/json',
