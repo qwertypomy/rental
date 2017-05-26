@@ -37,9 +37,9 @@ class UserViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericV
 
 
 class CurrentUserView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request):
-        if request.user.is_anonymous:
-            return Response("You are not logged in.")
         serializer = UserSerializer(request.user, context={'request': request})
         return Response(serializer.data)
 

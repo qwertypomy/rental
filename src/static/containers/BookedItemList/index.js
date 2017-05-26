@@ -3,14 +3,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { itemFetchData } from '../../actions/item';
-import { bookFetchData } from '../../actions/book';
+import { usersFetchData } from '../../actions/users';
+import { bookFetchUserRentals, bookFetchAllRentals } from '../../actions/book';
 
 import { BookedItemView }  from '../index';
 
 class BookedItemListView extends React.Component {
   componentWillMount() {
+    const { token } = this.props;
+    if(this.props.isStaff){
+      this.props.actions.usersFetchData(token);
+      this.props.actions.bookFetchAllRentals(token);
+    } else {
+      this.props.actions.bookFetchUserRentals(token);
+    }
     this.props.actions.itemFetchData();
-    this.props.actions.bookFetchData(this.props.token);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -18,15 +25,17 @@ class BookedItemListView extends React.Component {
   }
 
   render() {
-    const { bookData, itemData, isStaff } = this.props;
+    const { bookData, itemData, usersData, isStaff } = this.props;
     console.log('bookData: ',bookData);
     return (
       <div className="booked-item-list margin-top-medium">
         <div className="card-group">
           {
-            bookData && bookData.map((book) =>
+            bookData && itemData && bookData.map((book) =>
               <BookedItemView key={ book.url } book={book}
-                item={ itemData.find((item) => item.url==book.item) } />
+                item={ itemData.find((item) => item.url==book.item) }
+                user={book.hasOwnProperty('user') && usersData ? usersData.find((user) => user.url==book.user) : undefined}
+                />
             )
           }
         </div>
@@ -39,13 +48,21 @@ const mapStateToProps = (state) => {
     return {
         itemData: state.item.data,
         bookData: state.book.data,
-        token: state.auth.data.token
+        usersData: state.auth.data.isStaff ? state.users.data : null,
+        token: state.auth.data.token,
+        isStaff: state.auth.data.isStaff
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        actions: bindActionCreators({itemFetchData, bookFetchData}, dispatch)
+        actions: bindActionCreators(
+          {
+            itemFetchData,
+            bookFetchUserRentals,
+            bookFetchAllRentals,
+            usersFetchData
+           }, dispatch)
     };
 };
 

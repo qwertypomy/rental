@@ -46,10 +46,16 @@ class UserItemRentalPutSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UnauthorisedItemRentalSerializer(BaseRentalSerializer):
-
     class Meta:
         model = UnauthorisedItemRental
         fields = ('url', 'full_name', 'phone_number', 'email', 'item', 'status', 'rental_date_start',
                   'rental_date_out', 'rental_date_returned', 'rental_amount_due', 'created')
         read_only_fields = ['status', 'user', 'rental_date_returned', 'rental_amount_due', 'created']
 
+
+class UnauthorisedItemRentalPutSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = UnauthorisedItemRental
+        fields = ('url', 'full_name', 'phone_number', 'item', 'status', 'rental_date_start', 'rental_date_out', 'rental_date_returned',
+                  'rental_amount_due', 'created')
+        read_only_fields = ['item', 'rental_date_start', 'rental_date_out','full_name', 'phone_number', 'rental_date_returned', 'rental_amount_due', 'created']

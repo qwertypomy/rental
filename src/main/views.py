@@ -1,13 +1,13 @@
 from rest_framework import viewsets
 from rest_framework import status
-
+from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import list_route
 
 
 from main.serializers import CategorySerializer, ItemSerializer, UserItemRentalSerializer, \
-    UnauthorisedItemRentalSerializer, UserItemRentalPutSerializer
+    UnauthorisedItemRentalSerializer, UserItemRentalPutSerializer, UnauthorisedItemRentalPutSerializer
 from main.models import Category, Item, UserItemRental, UnauthorisedItemRental
 from main.utils import available_items
 
@@ -53,7 +53,7 @@ class UserItemRentalViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated() if (self.request.method == 'GET' or self.request.method == 'POST') else IsAdminUser()]
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT' or 'PATCH':
+        if self.request.method == 'PUT' or self.request.method == 'PATCH':
             return UserItemRentalPutSerializer
         return UserItemRentalSerializer
 
@@ -74,13 +74,26 @@ class UserItemRentalViewSet(viewsets.ModelViewSet):
 
 
 class UnauthorisedItemRentalViewSet(viewsets.ModelViewSet):
-    serializer_class = UnauthorisedItemRentalSerializer
-
     def get_permissions(self):
         return [AllowAny() if self.request.method == 'POST' else IsAdminUser()]
+
+    def get_serializer_class(self):
+        if self.request.method == 'PUT' or 'PATCH':
+            return UnauthorisedItemRentalPutSerializer
+        return UnauthorisedItemRentalSerializer
 
     def get_queryset(self):
         params_status = self.request.query_params.get('status', False)
         if params_status:
             return UnauthorisedItemRental.objects.filter(status=params_status).order_by('-created')
         return UnauthorisedItemRental.objects.all().order_by('-created')
+
+
+class AllRentalView(APIView):
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request):
+        data = UserItemRentalSerializer(UserItemRental.objects.all(), context={'request': request}, many=True).data + \
+                     UnauthorisedItemRentalSerializer(UnauthorisedItemRental.objects.all(), context={'request': request}, many=True).data
+        data.sort(key=lambda x: x['created'], reverse=True)
+        return Response(data)

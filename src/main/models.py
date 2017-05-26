@@ -11,6 +11,7 @@ from accounts.models import User
 
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     parent = models.ForeignKey('self', null=True, blank=True, related_name='child')

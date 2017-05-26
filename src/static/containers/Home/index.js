@@ -1,4 +1,6 @@
 import React from 'react';
+import moment from 'moment';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../../actions/date';
@@ -60,6 +62,7 @@ class HomeView extends React.Component {
                     calendars={1}
                     twoStepChange={true}
                     format="L"
+                    minDate={moment()}
                 />
               </div>
               {!this.props.userName && <ContactFormView />}

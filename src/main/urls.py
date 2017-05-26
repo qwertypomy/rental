@@ -13,4 +13,5 @@ urlpatterns = router.urls
 
 urlpatterns += [
     url(r'^categories/(?P<pk>\d+)/items/$', main_views.CategoryViewSet.as_view({'get': 'items'})),
+    url(r'^all-rentals/$', main_views.AllRentalView.as_view())
 ]

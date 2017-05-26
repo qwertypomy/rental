@@ -37,7 +37,7 @@ export function bookSetBook(data) {
     };
 }
 
-export function bookFetchDataRequest() {
+export function bookFetchUserRentalsRequest() {
     return {
         type: BOOK_FETCH_DATA_REQUEST
     };
@@ -45,7 +45,7 @@ export function bookFetchDataRequest() {
 
 export function bookCreateUnauthorisedItemRental(data) {
   return (dispatch, state) => {
-      dispatch(bookFetchDataRequest());
+      dispatch(bookFetchUserRentalsRequest());
       return fetch(`${SERVER_URL}/api/v1/rentals-unauthorised/`, {
           method: 'post',
           credentials: 'include',
@@ -65,7 +65,7 @@ export function bookCreateUnauthorisedItemRental(data) {
 
 export function bookCreateUserItemRental(token, data) {
   return (dispatch, state) => {
-      dispatch(bookFetchDataRequest());
+      dispatch(bookFetchUserRentalsRequest());
       return fetch(`${SERVER_URL}/api/v1/rentals/`, {
           method: 'post',
           credentials: 'include',
@@ -84,10 +84,29 @@ export function bookCreateUserItemRental(token, data) {
   };
 }
 
-export function bookFetchData(token) {
+export function bookFetchUserRentals(token) {
     return (dispatch, state) => {
-        dispatch(bookFetchDataRequest());
+        dispatch(bookFetchUserRentalsRequest());
         return fetch(`${SERVER_URL}/api/v1/rentals/`, {
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
+            }
+        })
+            .then(checkHttpStatus)
+            .then(parseJSON)
+            .then((response) => {
+                dispatch(bookReceiveData(response));
+            });
+    };
+}
+
+export function bookFetchAllRentals(token) {
+    return (dispatch, state) => {
+        dispatch(bookFetchUserRentalsRequest());
+        return fetch(`${SERVER_URL}/api/v1/all-rentals/`, {
             credentials: 'include',
             headers: {
                 'Accept': 'application/json',
@@ -106,7 +125,7 @@ export function bookFetchData(token) {
 export function bookEditRental(url, token, data) {
   console.log(JSON.stringify(data));
   return (dispatch, state) => {
-      dispatch(bookFetchDataRequest());
+      dispatch(bookFetchUserRentalsRequest());
       return fetch(url, {
           method: 'put',
           credentials: 'include',

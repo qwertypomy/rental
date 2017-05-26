@@ -1,4 +1,6 @@
 import React from 'react';
+import moment from 'moment';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { bookEditRental } from '../../actions/book';
@@ -14,6 +16,7 @@ class BookedItemView extends React.Component {
     this.renderButton = this.renderButton.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.renderUserInfo = this.renderUserInfo.bind(this);
   }
 
   convertStatus(status) {
@@ -74,11 +77,27 @@ class BookedItemView extends React.Component {
     } else {
       this.setState({changeButton: false});
     }
+  }
 
+  renderUserInfo() {
+    const { book, user } = this.props;
+    if (user) {
+      return(
+        <div>
+          <p className="text-info">{user.first_name} {user.last_name} {user.phone_number}</p>
+        </div>
+      );
+    } else {
+      return(
+        <div>
+          <p className="text-info">{book.full_name} {book.phone_number}</p>
+        </div>
+      );
+    }
   }
 
   render() {
-    const { item, book, isStaff } = this.props;
+    const { item, book, user, isStaff } = this.props;
     return (
       <div className="card col-md-4">
         <img className="card-img-top" src={item.attributes.imgs[0]} alt="Card image cap"/>
@@ -94,9 +113,17 @@ class BookedItemView extends React.Component {
             )
           }
           <div className="card-subtitle">
+            <p className="text-info">Created: {moment(book.created).format('Do MMMM YYYY, h:mm:ss a')}</p>
             <p className="text-info">Status: {this.convertStatus(book.status)}</p>
-            <p className="text-info">From {book.rental_date_start} to {book.rental_date_out}</p>
+            <p className="text-info">
+              {
+                'From ' +
+                moment(book.rental_date_start).format('Do MMMM YYYY') +
+                ' to ' + moment(book.rental_date_out).format('Do MMMM YYYY')
+              }
+            </p>
             <p className="text-info">{book.rental_amount_due + " UAH"}</p>
+            {this.renderUserInfo()}
             {this.renderButton()}
 
           </div>

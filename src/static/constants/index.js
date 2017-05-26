@@ -31,3 +31,6 @@ export const ACCOUNT_INFO = 'Account information';
 export const BOOKED_ITEMS = 'Booked items';
 
 export const BOOK_SET_BOOK = 'BOOK_SET_BOOK';
+
+export const USERS_RECEIVE_DATA = 'USERS_RECEIVE_DATA';
+export const USERS_FETCH_DATA_REQUEST = 'USERS_FETCH_DATA_REQUEST';
