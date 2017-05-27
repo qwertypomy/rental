@@ -53,7 +53,10 @@ export function bookCreateUnauthorisedItemRental(data) {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader('X-CSRFToken', Cookies.get('csrftoken'))
+          }
       })
           .then(checkHttpStatus)
           .then(parseJSON)

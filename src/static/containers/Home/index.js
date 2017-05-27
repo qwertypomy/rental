@@ -67,7 +67,7 @@ class HomeView extends React.Component {
               </div>
               {!this.props.userName && <ContactFormView />}
             </div>
-            <div className="container">
+            <div className="container main-content">
               <ItemListView />
             </div>
           </div>

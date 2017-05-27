@@ -35,8 +35,6 @@ class BookedItemView extends React.Component {
   }
 
   renderButton() {
-    //TODO: ререндерить измененный Book ---- ?? componentWillReceiveProps
-    //TODO: Отображать юзера
     if (this.state.changeButton) {
       return (
         <a href="#" disabled={this.props.isFetching}
@@ -103,7 +101,7 @@ class BookedItemView extends React.Component {
         <img className="card-img-top" src={item.photo} alt="Card image cap"/>
         <div className="card-block">
           <h4 className="card-title">{item.name}</h4>
-          <p className="card-text">{item.description}</p>
+          { !isStaff && <p className="card-text">{item.description}</p> }
           {
             Object.keys(item.attributes).map((key, index) =>
               <p className="attribute text-muted" key={index}>{key + ': ' + item.attributes[key]}</p>
@@ -120,8 +118,8 @@ class BookedItemView extends React.Component {
               }
             </p>
             <p className="text-info">{book.rental_amount_due + " UAH"}</p>
-            {this.renderUserInfo()}
-            {this.renderButton()}
+            {isStaff && this.renderUserInfo()}
+            {isStaff && this.renderButton()}
 
           </div>
         </div>

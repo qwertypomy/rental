@@ -28,7 +28,7 @@ class ProfileView extends React.Component {
   render() {
     return (
       <div className="profile">
-        <div className="container">
+        <div className="container main-content">
           <a href="#" className="btn btn-info"
             disabled={this.props.bookIsFetching || this.props.authIsFetching}
             onClick={(e) => this.handleClick(e)} >

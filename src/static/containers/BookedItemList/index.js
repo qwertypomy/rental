@@ -43,25 +43,29 @@ class BookedItemListView extends React.Component {
     console.log('bookData: ',bookData);
     return (
       <div>
-        <div className="row">
-          <div className="category-filter col-md-3">
-            <h4>Filter by status:</h4>
-            <form onSubmit={this.handleSubmit}>
-              <label>
-                <select className="form-control"
-                  value={this.state.selectedValue}
-                  onChange={this.handleChange}>
-                  <option value=""></option>
-                  <option value="N">Waiting for confirmation.</option>
-                  <option value="C">Confirmed, waiting for you.</option>
-                  <option value="P">Is given to you.</option>
-                  <option value="F">Completed(Returned).</option>
-                  <option value="E">Canceled.</option>
-                </select>
-              </label>
-            </form>
+        {
+          isStaff &&
+          <div className="row">
+            <div className="category-filter col-md-3">
+              <h4>Filter by status:</h4>
+              <form onSubmit={this.handleSubmit}>
+                <label>
+                  <select className="form-control"
+                    value={this.state.selectedValue}
+                    onChange={this.handleChange}>
+                    <option value=""></option>
+                    <option value="N">Waiting for confirmation.</option>
+                    <option value="C">Confirmed, waiting for you.</option>
+                    <option value="P">Is given to you.</option>
+                    <option value="F">Completed(Returned).</option>
+                    <option value="E">Canceled.</option>
+                  </select>
+                </label>
+              </form>
+            </div>
           </div>
-        </div>
+        }
+
 
         <div className="booked-item-list margin-top-medium">
           <div className="card-group">

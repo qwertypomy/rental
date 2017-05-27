@@ -78,7 +78,7 @@ class UnauthorisedItemRentalViewSet(viewsets.ModelViewSet):
         return [AllowAny() if self.request.method == 'POST' else IsAdminUser()]
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT' or 'PATCH':
+        if self.request.method == 'PUT' or self.request.method == 'PATCH':
             return UnauthorisedItemRentalPutSerializer
         return UnauthorisedItemRentalSerializer
 
@@ -93,7 +93,7 @@ class AllRentalView(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request):
-        params_status = request.query_params.get('status', False);
+        params_status = request.query_params.get('status', False)
         if params_status:
             data = UserItemRentalSerializer(UserItemRental.objects.filter(status=params_status), context={'request': request}, many=True).data + \
                    UnauthorisedItemRentalSerializer(UnauthorisedItemRental.objects.filter(status=params_status), context={'request': request}, many=True).data
