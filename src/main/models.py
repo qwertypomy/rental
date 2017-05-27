@@ -34,6 +34,7 @@ class Item(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     daily_rate = models.PositiveSmallIntegerField()
     attributes = JSONField()
+    photo = models.CharField(max_length=1000)
 
     def __str__(self):
         return self.name

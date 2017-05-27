@@ -9,7 +9,7 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Item
-        fields = ('url', 'name', 'category', 'description', 'daily_rate', 'attributes')
+        fields = ('url', 'name', 'category', 'description', 'daily_rate', 'attributes', 'photo')
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):

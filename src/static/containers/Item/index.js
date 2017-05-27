@@ -40,20 +40,17 @@ class ItemView extends React.Component {
   }
 
   render() {
-    const { url, name, description, daily_rate, attributes } = this.props.item;
+    const { url, name, description, daily_rate, attributes, photo } = this.props.item;
     const { dateRange } = this.props;
     return (
       <div className="card col-md-3">
-        <img className="card-img-top" src={attributes.imgs[0]} alt="Card image cap"/>
+        <img className="card-img-top" src={photo} alt="Card image cap"/>
         <div className="card-block">
           <h4 className="card-title">{name}</h4>
           <p className="card-text">{description}</p>
           {
-            Object.keys(attributes).map((key, index) => {
-              if(key!='imgs') {
-                return <p className="attribute text-muted" key={index}>{key + ': ' + attributes[key]}</p>;
-              }
-            }
+            Object.keys(attributes).map((key, index) =>
+              <p className="attribute text-muted" key={index}>{key + ': ' + attributes[key]}</p>
             )
           }
           <p className="card-subtitle mb-2 text-info">{daily_rate + " UAH/Day"}</p>

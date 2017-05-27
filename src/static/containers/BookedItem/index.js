@@ -100,16 +100,13 @@ class BookedItemView extends React.Component {
     const { item, book, user, isStaff } = this.props;
     return (
       <div className="card col-md-4">
-        <img className="card-img-top" src={item.attributes.imgs[0]} alt="Card image cap"/>
+        <img className="card-img-top" src={item.photo} alt="Card image cap"/>
         <div className="card-block">
           <h4 className="card-title">{item.name}</h4>
           <p className="card-text">{item.description}</p>
           {
-            Object.keys(item.attributes).map((key, index) => {
-              if(key!='imgs') {
-                return <p className="attribute text-muted" key={index}>{key + ': ' + item.attributes[key]}</p>;
-              }
-            }
+            Object.keys(item.attributes).map((key, index) =>
+              <p className="attribute text-muted" key={index}>{key + ': ' + item.attributes[key]}</p>
             )
           }
           <div className="card-subtitle">

@@ -9,7 +9,6 @@ urlpatterns = [
     url(r'^api/v1/', include('main.urls')),
     url(r'^api/v1/session-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/v1/accounts/', include('accounts.urls')),
-    url(r'^api/v1/getdata/', include('base.urls', namespace='base')),
     url(r'^admin/', admin.site.urls),
 
     # catch all others because of how history is handled by react router - cache this page because it will never change
