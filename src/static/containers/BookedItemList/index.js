@@ -24,10 +24,6 @@ class BookedItemListView extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('nextProps:',nextProps);
-  }
-
   handleChange(event) {
     const { token } = this.props;
     if(event.target.value) {
@@ -39,8 +35,7 @@ class BookedItemListView extends React.Component {
   }
 
   render() {
-    const { bookData, itemData, usersData, isStaff } = this.props;
-    console.log('bookData: ',bookData);
+    const {itemData, bookData, usersData, isStaff } = this.props;
     return (
       <div>
         {

@@ -21,16 +21,9 @@ export default createReducer(initialState, {
         });
     },
     [BOOK_SET_BOOK]: (state, payload) => {
-      console.log(payload.data);
-        let bookIndex = state.data.findIndex((book) => book.url==payload.data.url);
-        let data = state.data;
-        console.log('state.data: ', data);
+        let data = [...state.data];
+        const bookIndex = data.findIndex((book) => book.url==payload.data.url);
         data[bookIndex] = payload.data;
-        console.log({
-            statusText:'',
-            isFetching: false,
-            data: data
-        });
         return Object.assign({}, state, {
             statusText:'',
             isFetching: false,

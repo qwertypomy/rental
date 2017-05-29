@@ -107,7 +107,6 @@ export function bookFetchUserRentals(token) {
 }
 
 export function bookFetchAllRentals(token, params={}) {
-  console.log(`${SERVER_URL}/api/v1/all-rentals/${queryString(params)}`);
     return (dispatch, state) => {
         dispatch(bookFetchUserRentalsRequest());
         return fetch(`${SERVER_URL}/api/v1/all-rentals/${queryString(params)}`, {
@@ -127,7 +126,6 @@ export function bookFetchAllRentals(token, params={}) {
 }
 
 export function bookEditRental(url, token, data) {
-  console.log(JSON.stringify(data));
   return (dispatch, state) => {
       dispatch(bookFetchUserRentalsRequest());
       return fetch(url, {
